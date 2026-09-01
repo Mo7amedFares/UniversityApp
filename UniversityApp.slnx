@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="UniversityApp.Api/UniversityApp.Api.csproj" />
+  <Project Path="UniversityApp.Application/UniversityApp.Application.csproj" />
+  <Project Path="UniversityApp.Domain/UniversityApp.Domain.csproj" />
+  <Project Path="UniversityApp.Infrastructure/UniversityApp.Infrastructure.csproj" />
+</Solution>
