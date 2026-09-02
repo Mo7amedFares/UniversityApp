@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UniversityApp.Application.Features.Requests.Queries.GetAllRequests;
 using UniversityApp.Application.Features.Requests.Queries.GetMyRequests;
 using UniversityApp.Application.Features.Services.Commands.CreateRequest;
+using UniversityApp.Application.Features.Services.Queries.GetAllRequests;
 using UniversityApp.Application.Features.Services.Queries.GetMyRequests;
 
 namespace UniversityApp.Api.Controllers
@@ -32,6 +34,16 @@ namespace UniversityApp.Api.Controllers
         public async Task<ActionResult<List<RequestDto>>> GetMyRequests()
         {
             var query = new GetMyRequestsQuery();
+            var result = await _mediator.Send(query);
+
+            return Ok(result);
+        }
+
+        [HttpGet("all")]
+        [Authorize(Roles = "Admin")] // السر كله هنا!
+        public async Task<ActionResult<List<AdminRequestDto>>> GetAllRequests()
+        {
+            var query = new GetAllRequestsQuery();
             var result = await _mediator.Send(query);
 
             return Ok(result);
