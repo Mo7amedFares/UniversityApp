@@ -11,8 +11,10 @@ namespace UniversityApp.Application.Features.Services.Commands.CreateRequest
         {
             RuleFor(x => x.ServiceId)
                 .GreaterThan(0).WithMessage("ServiceId must be greater than 0.");
-            RuleFor(x => x.StudentId)
-                .GreaterThan(0).WithMessage("StudentId must be greater than 0.");
+            RuleFor(x => x.NationalId)
+                .NotEmpty().WithMessage("NationalId is required.")
+                .Matches(@"^\d{14}$").WithMessage("National ID must be a 14-digit number.");
+
         }
     }
 }

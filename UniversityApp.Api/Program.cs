@@ -7,6 +7,7 @@ using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using UniversityApp.Api.ExceptionHandlers;
+using UniversityApp.Api.Services;
 using UniversityApp.Application.Common.Behaviors;
 using UniversityApp.Application.Common.Interfaces;
 using UniversityApp.Application.Features.Services.Queries.GetAllServices;
@@ -92,6 +93,12 @@ public partial class Program
                 Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]!))
         };
     });
+
+        // هذا السطر ضروري جداً لكي يعمل IHttpContextAccessor
+        builder.Services.AddHttpContextAccessor();
+
+        // تسجيل خدمتنا
+        builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         var app = builder.Build();
 

@@ -12,8 +12,8 @@ using UniversityApp.Infrastructure.Persistence;
 namespace UniversityApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260901223956_Edit RequestFiles to RequestNote")]
-    partial class EditRequestFilestoRequestNote
+    [Migration("20260902005342_Add Column UpdateAt in Request Table")]
+    partial class AddColumnUpdateAtinRequestTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -114,6 +114,9 @@ namespace UniversityApp.Infrastructure.Migrations
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ServiceId");
@@ -155,7 +158,7 @@ namespace UniversityApp.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RequestNotes");
+                    b.ToTable("RequestNotes", (string)null);
                 });
 
             modelBuilder.Entity("UniversityApp.Domain.Entities.Service", b =>
@@ -295,7 +298,7 @@ namespace UniversityApp.Infrastructure.Migrations
                     b.HasOne("UniversityApp.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Request");

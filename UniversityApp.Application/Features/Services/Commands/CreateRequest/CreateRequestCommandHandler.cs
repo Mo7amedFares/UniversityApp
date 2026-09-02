@@ -25,34 +25,37 @@ namespace UniversityApp.Application.Features.Services.Commands.CreateRequest
                 throw new Exception($"Service with ID {request.ServiceId} does not exist.");
             }
 
-            bool studentExists = await _context.Users.AnyAsync(s => s.Id == request.StudentId, cancellationToken);
+            // 2. البحث عن الطالب بالرقم القومي (لأن المستخدم Guest)
+            var student = await _context.Users
+                .AsNoTracking()
+                .SingleOrDefaultAsync(s => s.NationalId == request.NationalId, cancellationToken);
 
-            if(!studentExists)
+            if (student == null)
             {
-                throw new Exception($"Student with ID {request.StudentId} does not exist.");
+                throw new Exception($"National ID not found: {request.NationalId}");
             }
 
             bool isAlredyRequestPending = await _context.Requests
                 .AnyAsync(r => r.ServiceId == request.ServiceId
-                && r.StudentId == request.StudentId 
+                && r.StudentId == student.Id 
                 && r.Status == Domain.Enums.RequestStatus.Pending
                 , cancellationToken);
 
             if(isAlredyRequestPending)
             {
-                throw new Exception($"Request for Service with ID {request.ServiceId} and Student with ID {request.StudentId} is already pending.");
+                throw new Exception($"Request for Service with ID {request.ServiceId} and National ID {request.NationalId} is already pending.");
             }
 
             var requestEntity = new Request
             {
                 ServiceId = request.ServiceId,
-                StudentId = request.StudentId,
+                StudentId = student.Id,
                 Status = Domain.Enums.RequestStatus.Pending
             };
 
             _context.Requests.Add(requestEntity);
-            int RequstId = await _context.SaveChangesAsync(cancellationToken);
-            return RequstId;
+             await _context.SaveChangesAsync(cancellationToken);
+            return requestEntity.Id;
         }
     }
 }

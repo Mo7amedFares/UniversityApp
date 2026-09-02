@@ -11,6 +11,7 @@ namespace UniversityApp.Domain.Entities
         public int ServiceId { get; set; }
         public int StudentId { get; set; }
         public RequestStatus Status { get; set; } = RequestStatus.Pending;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public Service Service { get; set; } = null!; // Navigation property to the Service entity
         public User Student { get; set; } = null!; // Navigation property to the Student entity
         public Payment? Payment { get; set; } // Navigation property to the Payment entity

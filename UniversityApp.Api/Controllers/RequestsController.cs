@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UniversityApp.Application.Features.Requests.Queries.GetMyRequests;
 using UniversityApp.Application.Features.Services.Commands.CreateRequest;
+using UniversityApp.Application.Features.Services.Queries.GetMyRequests;
 
 namespace UniversityApp.Api.Controllers
 {
@@ -17,10 +19,22 @@ namespace UniversityApp.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRequest([FromBody] CreateRequestCommand command)
+        [AllowAnonymous] // مسموح للعامة
+        public async Task<ActionResult<int>> CreateRequest([FromBody] CreateRequestCommand command)
         {
-            int requestId = await _mediator.Send(command);
-            return Ok(requestId);
+            var requestId = await _mediator.Send(command);
+
+            return Ok(new { RequestId = requestId });
+        }
+
+        [HttpGet("my-requests")]
+        [Authorize] // هذا يحمي المسار ويجبر السيرفر على قراءة التوكن
+        public async Task<ActionResult<List<RequestDto>>> GetMyRequests()
+        {
+            var query = new GetMyRequestsQuery();
+            var result = await _mediator.Send(query);
+
+            return Ok(result);
         }
     }
 }
