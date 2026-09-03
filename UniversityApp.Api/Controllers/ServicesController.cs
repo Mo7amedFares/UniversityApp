@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UniversityApp.Application.Features.Services.Commands.AddRequestNote;
 using UniversityApp.Application.Features.Services.Commands.CreateService;
 using UniversityApp.Application.Features.Services.Queries.GetAllServices;
 
@@ -27,8 +29,10 @@ namespace UniversityApp.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<int>> Create([FromBody] CreateServiceCommand command)
         {
-           var serviceId = await _mediator.Send(command);
+            var serviceId = await _mediator.Send(command);
             return Ok(serviceId);
         }
+
+     
     }
 }

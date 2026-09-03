@@ -4,7 +4,7 @@
     {
         int? UserId { get; }
         string? NationalId { get; }
-        string? Role { get; }
+        string?  Role { get; }
         bool IsAuthenticated { get; }
     }
 }

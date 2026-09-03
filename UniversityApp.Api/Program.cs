@@ -77,6 +77,7 @@ public partial class Program
 
         // تسجيل خدمة توليد التوكن
         builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+        builder.Services.AddScoped<IFileService, FileService>();
 
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -101,6 +102,7 @@ public partial class Program
         builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         var app = builder.Build();
+        app.UseStaticFiles(); 
 
         app.UseExceptionHandler();
 

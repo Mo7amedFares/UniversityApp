@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using UniversityApp.Application.Common.Interfaces;
 using UniversityApp.Domain.Entities;
+using UniversityApp.Domain.Enums;
 
 namespace UniversityApp.Infrastructure.Authentication
 {
@@ -23,7 +24,7 @@ namespace UniversityApp.Infrastructure.Authentication
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim("national_id", user.NationalId),
-                new Claim(ClaimTypes.Role,user.Role.ToString()) // لتطبيق الصلاحيات لاحقاً
+                new Claim(ClaimTypes.Role,((UserRole)user.Role).ToString()) // لتطبيق الصلاحيات لاحقاً
             };
 
             var signingCredentials = new SigningCredentials(
