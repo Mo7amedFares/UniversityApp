@@ -49,7 +49,7 @@ namespace UniversityApp.Application.Features.Requests.Commands.CreateRequest
             {
                 ServiceId = request.ServiceId,
                 StudentId = student.Id,
-                Status = Domain.Enums.RequestStatus.Pending
+                Status = Domain.Enums.RequestStatus.AwaitingPayment
             };
 
             _context.Requests.Add(requestEntity);

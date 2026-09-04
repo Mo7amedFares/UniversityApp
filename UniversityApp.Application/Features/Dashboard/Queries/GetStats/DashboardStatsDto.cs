@@ -6,9 +6,9 @@ namespace UniversityApp.Application.Features.Dashboard.Queries.GetStats
     {
         public int TotalRequests { get; set; }
         public int PendingRequests { get; set; }
-        public int ApprovedRequests { get; set; }
+        public int CompletedRequests { get; set; }
         public int RejectedRequests { get; set; }
-        public int RequiresActionRequests { get; set; }
+        public int ProcessingRequests { get; set; }
         public int TotalActiveServices { get; set; }
 
         // (اختياري) يمكننا إرجاع أكثر الخدمات طلباً
