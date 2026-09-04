@@ -1,15 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UniversityApp.Application.Features.RequestNotes.Commands.AddRequestNote;
 using UniversityApp.Application.Features.RequestNotes.Queries.GetRequestNotes;
+using UniversityApp.Application.Features.Requests.Commands.CreateRequest;
+using UniversityApp.Application.Features.Requests.Commands.UpdateRequestStatus;
 using UniversityApp.Application.Features.Requests.Queries.GetAllRequests;
 using UniversityApp.Application.Features.Requests.Queries.GetMyRequests;
-using UniversityApp.Application.Features.Services.Commands.AddRequestNote;
-using UniversityApp.Application.Features.Services.Commands.CreateRequest;
-using UniversityApp.Application.Features.Services.Commands.UpdateRequestStatus;
-using UniversityApp.Application.Features.Services.Queries.GetAllRequests;
-using UniversityApp.Application.Features.Services.Queries.GetMyRequests;
-using UniversityApp.Application.Features.Services.Queries.GetRequestNotes;
+
 using UniversityApp.Domain.Enums;
 
 namespace UniversityApp.Api.Controllers

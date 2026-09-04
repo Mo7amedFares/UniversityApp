@@ -18,7 +18,7 @@ namespace UniversityApp.Infrastructure.Persistence
 
         public DbSet<Payment> Payments => Set<Payment>();
 
-        public DbSet<Notfication> Notifications => Set<Notfication>();
+        public DbSet<Notification> Notifications => Set<Notification>();
 
         public DbSet<Service> Services => Set<Service>();
 

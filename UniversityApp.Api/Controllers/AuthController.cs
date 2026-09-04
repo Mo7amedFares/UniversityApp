@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using UniversityApp.Application.Features.Services.Queries.Login;
+using UniversityApp.Application.Features.Login.Queries;
 
 namespace UniversityApp.Api.Controllers
 {

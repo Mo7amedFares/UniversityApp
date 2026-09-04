@@ -4,9 +4,9 @@ using UniversityApp.Domain.Entities;
 
 namespace UniversityApp.Infrastructure.Persistence.Configurations
 {
-    public class NotificationConfiguration : IEntityTypeConfiguration<Notfication>
+    public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
     {
-        public void Configure(EntityTypeBuilder<Notfication> builder)
+        public void Configure(EntityTypeBuilder<Notification> builder)
         {
             // منع الحذف المتسلسل بين المستخدم والإشعار
             builder.HasOne(n => n.User)

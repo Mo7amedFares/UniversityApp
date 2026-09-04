@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UniversityApp.Application.Features.Services.Commands.AddRequestNote;
 using UniversityApp.Application.Features.Services.Commands.CreateService;
+using UniversityApp.Application.Features.Services.Commands.UpdateService;
 using UniversityApp.Application.Features.Services.Queries.GetAllServices;
 
 namespace UniversityApp.Api.Controllers
@@ -19,7 +19,8 @@ namespace UniversityApp.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllServices(CancellationToken cancellationToken)
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             var query = new GetAllServicesQuery();
             var result = await _mediator.Send(query, cancellationToken);
@@ -27,12 +28,21 @@ namespace UniversityApp.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<int>> Create([FromBody] CreateServiceCommand command)
         {
             var serviceId = await _mediator.Send(command);
-            return Ok(serviceId);
+            return CreatedAtAction(nameof(GetAll), new { id = serviceId }, serviceId);
         }
 
-     
+        [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult<bool>> Update(int id ,[FromBody] UpdateServiceCommand command)
+        {
+            command.Id = id;
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
     }
 }

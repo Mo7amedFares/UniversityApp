@@ -15,6 +15,6 @@ namespace UniversityApp.Domain.Entities
         public UserRole Role { get; set; }
 
         public ICollection<Request> Requests { get; set; } = new List<Request>();
-        public ICollection<Notfication> Notifications { get; set; } = new List<Notfication>();
+        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
     }
 }

@@ -16,7 +16,7 @@ namespace UniversityApp.Domain.Entities
         public User Student { get; set; } = null!; // Navigation property to the Student entity
         public Payment? Payment { get; set; } // Navigation property to the Payment entity
         public ICollection<RequestNote> RequestNotes { get; set; } = new List<RequestNote>();
-        public ICollection<Notfication> Notifications { get; set; } = new List<Notfication>();
+        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
 
     }

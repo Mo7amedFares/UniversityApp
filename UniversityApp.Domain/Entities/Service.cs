@@ -8,6 +8,7 @@ namespace UniversityApp.Domain.Entities
         public string Description { get; set; } = string.Empty;
         public int WorkDays { get; set; }
         public decimal Fees { get; set; }
+        public bool IsActive { get; set; }
         public bool HasRequiredFiles { get; set; }
 
         // Navigation Property: لربط الخدمة بالطلبات المقدمة عليها (علاقة 1 إلى متعدد)

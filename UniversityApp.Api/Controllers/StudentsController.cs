@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using UniversityApp.Application.Features.Services.Commands.CreateStudent;
+using UniversityApp.Application.Features.Students.Commands.CreateStudent;
 
 namespace UniversityApp.Api.Controllers
 {

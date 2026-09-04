@@ -10,7 +10,7 @@ namespace UniversityApp.Application.Common.Interfaces
         DbSet<User> Users { get; }
         DbSet<Request> Requests { get; }
         DbSet<Payment> Payments { get; }
-        DbSet<Notfication> Notifications { get; }
+        DbSet<Notification> Notifications { get; }
         DbSet<Service> Services { get; }
         DbSet<RequestNote> RequestNotes { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
