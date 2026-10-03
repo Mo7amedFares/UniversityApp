@@ -4,10 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UniversityApp.Application.Common.Interfaces;
+using UniversityApp.Application.Common.Models;
+using UniversityApp.Domain.Enums;
 
 namespace UniversityApp.Application.Features.Requests.Queries.GetAllRequests
 {
-    public class GetAllRequestsQueryHandler : IRequestHandler<GetAllRequestsQuery, List<AdminRequestDto>>
+    public class GetAllRequestsQueryHandler : IRequestHandler<GetAllRequestsQuery, PagedResult<AdminRequestDto>>
     {
 
         private readonly IApplicationDbContext _context;
@@ -17,23 +19,55 @@ namespace UniversityApp.Application.Features.Requests.Queries.GetAllRequests
             _context = context;
             _currentUser = currentUser;
         }
-        public async Task<List<AdminRequestDto>> Handle(GetAllRequestsQuery request, CancellationToken cancellationToken)
+
+        public async Task<PagedResult<AdminRequestDto>> Handle(GetAllRequestsQuery request, CancellationToken cancellationToken)
         {
-            var requests = await _context.Requests.Select(r => new AdminRequestDto
+            var query = _context.Requests
+                .Include(r => r.Student)
+                .Include(r => r.Service)
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (request.Status.HasValue)
             {
-                RequestId = r.Id,
-                // استخدمنا Navigation Properties للوصول للبيانات مباشرة
-                StudentName = r.Student.Name, // تأكد أن اسم الخاصية لديك هو User أو Student
-                NationalId = r.Student.NationalId,
-                ServiceTitle = r.Service.Title,
-                Status = r.Status,
-                CreatedAt = r.CreatedAt,
-                UpdatedAt = r.UpdatedAt
+                query = query.Where(r => (int)r.Status == request.Status.Value);
+            }
 
-            }).OrderByDescending(r => r.UpdatedAt)
-            .ToListAsync(cancellationToken);
+            if (!string.IsNullOrWhiteSpace(request.Search))
+            {
+                var searchTrim = request.Search.Trim();
+                query = query.Where(r => 
+                    r.Student.Name.Contains(searchTrim) ||
+                    r.Student.NationalId.Contains(searchTrim) ||
+                    (r.Student.StudentCode != null && r.Student.StudentCode.Contains(searchTrim)));
+            }
 
-            return requests;
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .OrderByDescending(r => r.CreatedAt)
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(r => new AdminRequestDto
+                {
+                    RequestId = r.Id,
+                    StudentName = r.Student.Name,
+                    NationalId = r.Student.NationalId,
+                    ServiceTitle = r.Service.Title,
+                    Status = (RequestStatus)r.Status,
+                    CreatedAt = r.CreatedAt,
+                    UpdatedAt = r.UpdatedAt
+                })
+                .ToListAsync(cancellationToken);
+
+            return new PagedResult<AdminRequestDto>
+            {
+                Items = items,
+                Page = request.Page,
+                PageSize = request.PageSize,
+                TotalCount = totalCount,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize)
+            };
         }
     }
 }

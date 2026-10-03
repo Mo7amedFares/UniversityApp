@@ -20,9 +20,17 @@ namespace UniversityApp.Api.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 50,
+            [FromQuery] string? search = null , CancellationToken cancellationToken = default)
         {
-            var query = new GetAllServicesQuery();
+            var query = new GetAllServicesQuery
+            {
+                Page = page,
+                PageSize = pageSize,
+                Search = search
+            };
             var result = await _mediator.Send(query, cancellationToken);
             return Ok(result);
         }

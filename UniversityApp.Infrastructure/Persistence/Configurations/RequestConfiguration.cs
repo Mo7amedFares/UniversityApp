@@ -18,12 +18,12 @@ namespace UniversityApp.Infrastructure.Persistence.Configurations
             builder.HasOne(r => r.Student)
                 .WithMany(u => u.Requests)
                 .HasForeignKey(r => r.StudentId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict); 
 
             builder.HasOne(r => r.Service)
                 .WithMany(s => s.Requests)
                 .HasForeignKey(r => r.ServiceId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
 
         }

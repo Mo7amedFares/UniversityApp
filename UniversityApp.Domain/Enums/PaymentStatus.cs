@@ -6,8 +6,9 @@ namespace UniversityApp.Domain.Enums
 {
     public enum PaymentStatus
     {
-        success = 1,
-        failed = 2,
-        pending = 3
+        Pending = 1,
+        Completed = 2,
+        Failed = 3,
+        Refunded = 4
     }
 }

@@ -11,6 +11,7 @@ using UniversityApp.Api.Services;
 using UniversityApp.Application.Common.Behaviors;
 using UniversityApp.Application.Common.Interfaces;
 using UniversityApp.Application.Features.Services.Queries.GetAllServices;
+using UniversityApp.Domain.Entities;
 using UniversityApp.Infrastructure.Authentication;
 using UniversityApp.Infrastructure.Persistence;
 using UniversityApp.Infrastructure.Services;
@@ -100,8 +101,24 @@ public partial class Program
 
         // تسجيل خدمتنا
         builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+        // أضف هذا السطر مع باقي تسجيلات الـ Services
+        builder.Services.AddScoped<IPaymentService, MockPaymentService>();
+
+        // أضف هذا مع تسجيل الخدمات (Services)
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+            {
+                policy.AllowAnyOrigin()
+                      .AllowAnyMethod()
+                      .AllowAnyHeader();
+            });
+        });
 
         var app = builder.Build();
+
+        // أضف هذا في الـ Pipeline قبل app.UseAuthentication()
+        app.UseCors("AllowAll");
         app.UseStaticFiles(); 
 
         app.UseExceptionHandler();
@@ -119,6 +136,23 @@ public partial class Program
 
         // 2. السطر المفقود الثاني: توجيه الطلبات (Routing) للـ Controllers
         app.MapControllers();
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+            try
+            {
+                var context = services.GetRequiredService<ApplicationDbContext>();
+                if (context.Database.GetPendingMigrations().Any())
+                {
+                    context.Database.Migrate();
+                }
+            }
+            catch (Exception ex)
+            {
+                // يفضل تسجيل الخطأ هنا باستخدام ILogger
+                Console.WriteLine($"An error occurred while migrating the database: {ex.Message}");
+            }
+        }
 
         app.Run();
     }

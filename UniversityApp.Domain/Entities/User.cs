@@ -9,6 +9,7 @@ namespace UniversityApp.Domain.Entities
     public class User:BaseEntity
     {
         public string NationalId { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty; // الحقل الجديد
         public string? StudentCode { get; set; }
         public string Name { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;

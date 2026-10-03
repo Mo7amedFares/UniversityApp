@@ -35,6 +35,14 @@ namespace UniversityApp.Infrastructure.Persistence.Configurations
 
             builder.Property(u => u.PasswordHash).IsRequired();
 
+            // Configuration for User Entity
+            builder.Property(u => u.PhoneNumber)
+                   .IsRequired()
+                   .HasMaxLength(15);
+
+            builder.HasIndex(u => u.PhoneNumber)
+                   .IsUnique(); // العقد يطلب أن يكون رقم الهاتف فريداً
+
 
         }
     }

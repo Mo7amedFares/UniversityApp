@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UniversityApp.Application.Common.Models;
 using UniversityApp.Application.Features.RequestNotes.Commands.AddRequestNote;
 using UniversityApp.Application.Features.RequestNotes.Queries.GetRequestNotes;
 using UniversityApp.Application.Features.Requests.Commands.CreateRequest;
@@ -34,9 +35,19 @@ namespace UniversityApp.Api.Controllers
 
         [HttpGet("my-requests")]
         [Authorize] // هذا يحمي المسار ويجبر السيرفر على قراءة التوكن
-        public async Task<ActionResult<List<RequestDto>>> GetMyRequests()
+        public async Task<ActionResult<PagedResult<RequestDto>>> GetMyRequests(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 50,
+            [FromQuery] string? search = null,
+            [FromQuery] int? status = null)
         {
-            var query = new GetMyRequestsQuery();
+            var query = new GetMyRequestsQuery
+            {
+                Page = page,
+                PageSize = pageSize,
+                Search = search,
+                Status = status
+            };
             var result = await _mediator.Send(query);
 
             return Ok(result);
@@ -44,9 +55,19 @@ namespace UniversityApp.Api.Controllers
 
         [HttpGet("all")]
         [Authorize(Roles = "admin")] // السر كله هنا!
-        public async Task<ActionResult<List<AdminRequestDto>>> GetAllRequests()
+        public async Task<ActionResult<PagedResult<AdminRequestDto>>> GetAllRequests(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 50,
+            [FromQuery] string? search = null,
+            [FromQuery] int? status = null)
         {
-            var query = new GetAllRequestsQuery();
+            var query = new GetAllRequestsQuery
+            {
+                Page = page,
+                PageSize = pageSize,
+                Search = search,
+                Status = status
+            };
             var result = await _mediator.Send(query);
 
             return Ok(result);
