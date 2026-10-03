@@ -123,11 +123,8 @@ public partial class Program
 
         app.UseExceptionHandler();
 
-        if (app.Environment.IsDevelopment())
-        {
             app.UseSwagger();
             app.UseSwaggerUI();
-        }
 
         app.UseHttpsRedirection();
 
