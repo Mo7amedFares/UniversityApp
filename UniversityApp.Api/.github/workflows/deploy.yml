@@ -1,0 +1,33 @@
+name: Deploy to MonsterASP
+
+on:
+  push:
+    branches:
+      - master  # أو master لو الـ branch بتاعك اسمه master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+
+    - name: ⚙️ Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0' # تأكد إن ده نفس إصدار الـ .NET بتاعك
+
+    - name: 🛠️ Build and Publish
+      # تأكد من مسار مشروع الـ API بتاعك بشكل صحيح
+      run: dotnet publish UniversityApp.Api/UniversityApp.Api.csproj -c Release -o ./publish_output
+
+    - name: 🚀 Deploy via FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./publish_output/
+        # غالباً MonsterASP بيحط الملفات جوه مجلد wwwroot أو site1، لو معندكش مجلدات سيبها /
+        server-dir: /wwwroot/
