@@ -12,6 +12,7 @@ using UniversityApp.Application.Common.Behaviors;
 using UniversityApp.Application.Common.Interfaces;
 using UniversityApp.Application.Features.Services.Queries.GetAllServices;
 using UniversityApp.Domain.Entities;
+using UniversityApp.Domain.Enums;
 using UniversityApp.Infrastructure.Authentication;
 using UniversityApp.Infrastructure.Persistence;
 using UniversityApp.Infrastructure.Services;
@@ -116,6 +117,44 @@ public partial class Program
         });
 
         var app = builder.Build();
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+            try
+            {
+                // استبدل ApplicationDbContext باسم الـ DbContext الفعلي عندك
+                var context = services.GetRequiredService<ApplicationDbContext>();
+
+                // لو بتستخدم خدمة لتشفير الباسورد استدعيها هنا (مثال)
+                // var passwordHasher = services.GetRequiredService<IPasswordHasher>();
+
+                // التأكد من عدم وجود أي مستخدم بصلاحية أدمن
+                if (!context.Users.Any(u => u.Role == UserRole.admin))
+                {
+                    var adminUser = new User
+                    {
+                        Name = "مدير النظام",
+                        NationalId = "11112222333344", // حقل إجباري في الموديل
+                        PhoneNumber = "01000000000",   // حقل إجباري في الموديل
+                        StudentCode = null,            // الأدمن ليس له كود طالب
+                        Role = UserRole.admin,
+
+                        // يجب تشفير الباسورد قبل حفظه بناءً على الـ Service الخاصة بك
+                        // PasswordHash = passwordHasher.Hash("Admin@123") 
+                        PasswordHash = "Admin@123" // غيرها لتستخدم دالة التشفير الخاصة بك
+                    };
+
+                    context.Users.Add(adminUser);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                var logger = services.GetRequiredService<ILogger<Program>>();
+                logger.LogError(ex, "حدث خطأ أثناء إنشاء حساب الإدمن الافتراضي.");
+            }
+        }
 
         // أضف هذا في الـ Pipeline قبل app.UseAuthentication()
         app.UseCors("AllowAll");
