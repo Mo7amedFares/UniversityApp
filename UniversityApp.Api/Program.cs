@@ -136,8 +136,8 @@ public partial class Program
                     var adminUser = new User
                     {
                         Name = "مدير النظام",
-                        NationalId = "11112222333344", // حقل إجباري في الموديل
-                        PhoneNumber = "01000000000",   // حقل إجباري في الموديل
+                        NationalId = "11112222333345", // حقل إجباري في الموديل
+                        PhoneNumber = "01100000000",   // حقل إجباري في الموديل
                         StudentCode = null,            // الأدمن ليس له كود طالب
                         Role = UserRole.admin,
 
