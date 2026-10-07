@@ -130,6 +130,7 @@ public partial class Program
                 // var passwordHasher = services.GetRequiredService<IPasswordHasher>();
 
                 // التأكد من عدم وجود أي مستخدم بصلاحية أدمن
+                IPasswordHasher passwordHasher = services.GetRequiredService<IPasswordHasher>(); 
                 if (!context.Users.Any(u => u.Role == UserRole.admin))
                 {
                     var adminUser = new User
@@ -142,7 +143,8 @@ public partial class Program
 
                         // يجب تشفير الباسورد قبل حفظه بناءً على الـ Service الخاصة بك
                         // PasswordHash = passwordHasher.Hash("Admin@123") 
-                        PasswordHash = "Admin@123" // غيرها لتستخدم دالة التشفير الخاصة بك
+                        
+                        PasswordHash = passwordHasher.Hash("Admin@123"); // غيرها لتستخدم دالة التشفير الخاصة بك
                     };
 
                     context.Users.Add(adminUser);
