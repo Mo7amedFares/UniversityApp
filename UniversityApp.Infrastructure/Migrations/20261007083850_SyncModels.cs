@@ -25,7 +25,6 @@ namespace UniversityApp.Infrastructure.Migrations
                 maxLength: 15,
                 nullable: false,
                 defaultValue: "");
-            migrationBuilder.Sql("DELETE FROM [RequestNotes]; DELETE FROM [Requests]; DELETE FROM [Users];");
             migrationBuilder.CreateIndex(
                 name: "IX_Users_PhoneNumber",
                 table: "Users",
