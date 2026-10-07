@@ -144,7 +144,7 @@ public partial class Program
                         // يجب تشفير الباسورد قبل حفظه بناءً على الـ Service الخاصة بك
                         // PasswordHash = passwordHasher.Hash("Admin@123") 
                         
-                        PasswordHash = passwordHasher.Hash("Admin@123"); // غيرها لتستخدم دالة التشفير الخاصة بك
+                        PasswordHash = passwordHasher.Hash("Admin@123") // غيرها لتستخدم دالة التشفير الخاصة بك
                     };
 
                     context.Users.Add(adminUser);
